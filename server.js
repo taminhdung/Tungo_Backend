@@ -22,15 +22,25 @@ const HOST = "0.0.0.0"; // Render không cần đổi gì, chỉ để listen al
 
 const server = app.listen(PORT, HOST, () => {
   console.log(`✅ Server chạy tại http://${HOST}:${PORT}`);
-  try {
-        axios.get(`http://localhost:${port}/ctde`);
-        console.log("Kết nối database thành công");
-        axios.get(`http://localhost:${port}/ce`);
-        console.log("Tạo bảng thành công");
-    
+
+  // Tạo hàm async để gọi các hàm async và bắt lỗi
+  async function init() {
+    try {
+      await connectMySQL();
+      console.log('✅ Kết nối database thành công');
     } catch (err) {
-        console.error('❌ Kết nối DB thất bại khi tự kiểm tra:', err.response?.data || err.message);
+      console.error('❌ Kết nối database thất bại:', err.message);
     }
+
+    try {
+      await createTable();
+      console.log('✅ Tạo bảng thành công');
+    } catch (err) {
+      console.error('❌ Tạo bảng thất bại:', err.message);
+    }
+  }
+
+  init(); // gọi hàm async
 });
 
 app.get('/ctde', async (_req, res) => {// route kiểm tra kết nối database
