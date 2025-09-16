@@ -1,0 +1,101 @@
+const express = require('express');
+const fs = require('fs');
+const https = require('https');//import https
+const jwt = require('jsonwebtoken'); 
+const connectMySQL = require('./service/connect_database'); // import hàm connect
+const createTable = require('./service/create_table'); // import hàm tạo bảng
+const registerUser = require('./service/register'); // import hàm đăng ký user
+const loginUser = require('./service/login'); // import hàm đăng nhập user
+
+const app = express();// khởi tạo Express app
+
+app.use(express.json()); // Cho phép đọc JSON từ body
+
+const options = {//tạo chứng chỉ SSL
+  key: fs.readFileSync('./SSL/server.key'),
+  cert: fs.readFileSync('./SSL/server.cert')
+};
+
+https.createServer(options, app).listen(9999, "0.0.0.0" ,() => {
+  console.log('✅ HTTPS server chạy tại https://0.0.0.0:9999');
+});
+
+app.get('/ctde', async (_req, res) => {// route kiểm tra kết nối database
+    try {
+        const connect = await connectMySQL();
+
+        res.status(200).json({
+            message: 'Kết nối thành công!',
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: 'Kết nối thất bại!',
+            error: err.message,
+        });
+    }
+});
+
+app.post('/ce', async (_req, res) => {// route tạo bảng
+    try {
+        await createTable(); // gọi hàm tạo bảng
+
+        res.status(200).json({
+            message: 'Tạo bảng thành công!',
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: 'Tạo bảng thất bại!',
+            error: err.message,
+        });
+    }
+});
+
+app.post('/rr', async (req, res) => {// route đăng ký user
+    try {
+        const { username, password, email } = req.body;
+        await registerUser(username,password,email); // gọi hàm tạo bảng
+
+        res.status(200).json({
+            message: 'Thêm tài khoản thành công',
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: 'Thêm tài khoản thât bại',
+            error: err.message,
+        });
+    }
+});
+
+app.get('/ln', async (req, res) => {// route đăng nhập user
+    const { username, password } = req.body;
+    const rows = await loginUser(username, password);
+    const data_value=rows[0][0];
+    const Secure_key = `${Math.floor(Math.random() * 9007199254740991)}`;
+    const Refresh_key = `${Math.floor(Math.random() * -9007199254740991)}`;
+    const token_access=jwt.sign({id: data_value.id,username: data_value.username},Secure_key,{ expiresIn: "15m" });
+    const refresh_access=jwt.sign({id: data_value.id,username: data_value.username},Refresh_key,{ expiresIn: "7d" });
+    if (rows.length > 0) {
+        res.status(200).json({
+            message: 'Đăng nhập thành công',
+            username: data_value.username,
+            token_access: token_access,
+            refresh_access: refresh_access,
+        });
+    } else {
+        res.status(401).json({
+            message: 'Đăng nhập thất bại, sai tên đăng nhập hoặc mật khẩu',
+        });
+    }
+});
+
+app.get('/lt', async (_req, res) => {// route đăng xuất user
+    const Secure_key = `${Math.floor(Math.random() * 9007199254740991)}`;
+    const Refresh_key = `${Math.floor(Math.random() * -9007199254740991)}`;
+    const token_access=jwt.sign({id: data_value.id,username: data_value.username},Secure_key,{ expiresIn: "0s" });
+    const refresh_access=jwt.sign({id: data_value.id,username: data_value.username},Refresh_key,{ expiresIn: "0s" });
+    res.status(200).json({
+        message: 'Đăng xuất thành công',
+        token_access: token_access,
+        refresh_access: refresh_access,
+    });
+});
