@@ -6,6 +6,7 @@ const connectMySQL = require('./service/connect_database'); // import hàm conne
 const createTable = require('./service/create_table'); // import hàm tạo bảng
 const registerUser = require('./service/register'); // import hàm đăng ký user
 const loginUser = require('./service/login'); // import hàm đăng nhập user
+const axios = require('axios');
 
 const app = express();// khởi tạo Express app
 
@@ -16,8 +17,30 @@ const options = {//tạo chứng chỉ SSL
   cert: fs.readFileSync('./SSL/server.cert')
 };
 
-https.createServer(options, app).listen(9999, "0.0.0.0" ,() => {
-  console.log('✅ HTTPS server chạy tại https://0.0.0.0:9999');
+const PORT = process.env.PORT || 9999; // Render sẽ cung cấp PORT
+const HOST = "0.0.0.0"; // Render không cần đổi gì, chỉ để listen all
+
+const server = app.listen(PORT, HOST, () => {
+  console.log(`✅ Server chạy tại http://${HOST}:${PORT}`);
+
+  // Tạo hàm async để gọi các hàm async và bắt lỗi
+  async function init() {
+    try {
+      await connectMySQL();
+      console.log('✅ Kết nối database thành công');
+    } catch (err) {
+      console.error('❌ Kết nối database thất bại:', err.message);
+    }
+
+    try {
+      await createTable();
+      console.log('✅ Tạo bảng thành công');
+    } catch (err) {
+      console.error('❌ Tạo bảng thất bại:', err.message);
+    }
+  }
+
+  init(); // gọi hàm async
 });
 
 app.get('/ctde', async (_req, res) => {// route kiểm tra kết nối database
