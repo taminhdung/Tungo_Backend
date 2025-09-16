@@ -21,6 +21,13 @@ const HOST = "0.0.0.0"; // Render không cần đổi gì, chỉ để listen al
 
 const server = app.listen(PORT, HOST, () => {
   console.log(`✅ Server chạy tại http://${HOST}:${PORT}`);
+  try {
+        const res = await axios.get(`http://localhost:${port}/ctde`);
+        const res = await axios.get(`http://localhost:${port}/ce`);
+    
+    } catch (err) {
+        console.error('❌ Kết nối DB thất bại khi tự kiểm tra:', err.response?.data || err.message);
+    }
 });
 
 app.get('/ctde', async (_req, res) => {// route kiểm tra kết nối database
