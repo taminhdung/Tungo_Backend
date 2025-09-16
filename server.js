@@ -100,6 +100,7 @@ app.get('/ln', async (req, res) => {// route đăng nhập user
     if (rows.length > 0) {
         res.status(200).json({
             message: 'Đăng nhập thành công',
+            id: data_value.id,
             username: data_value.username,
             token_access: token_access,
             refresh_access: refresh_access,
@@ -111,11 +112,12 @@ app.get('/ln', async (req, res) => {// route đăng nhập user
     }
 });
 
-app.get('/lt', async (_req, res) => {// route đăng xuất user
+app.get('/lt', async (req, res) => {// route đăng xuất user
+    const {id, username} = req.body;
     const Secure_key = `${Math.floor(Math.random() * 9007199254740991)}`;
     const Refresh_key = `${Math.floor(Math.random() * -9007199254740991)}`;
-    const token_access=jwt.sign({id: data_value.id,username: data_value.username},Secure_key,{ expiresIn: "0s" });
-    const refresh_access=jwt.sign({id: data_value.id,username: data_value.username},Refresh_key,{ expiresIn: "0s" });
+    const token_access=jwt.sign({id: id,username: username},Secure_key,{ expiresIn: "0s" });
+    const refresh_access=jwt.sign({id: id,username: username},Refresh_key,{ expiresIn: "0s" });
     res.status(200).json({
         message: 'Đăng xuất thành công',
         token_access: token_access,
