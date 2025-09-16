@@ -58,7 +58,7 @@ app.get('/ctde', async (_req, res) => {// route kiểm tra kết nối database
     }
 });
 
-app.post('/ce', async (_req, res) => {// route tạo bảng
+app.post('/cete', async (_req, res) => {// route tạo bảng
     try {
         await createTable(); // gọi hàm tạo bảng
 
