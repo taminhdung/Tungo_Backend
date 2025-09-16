@@ -29,7 +29,6 @@ app.get('/ctde', async (_req, res) => {// route kiểm tra kết nối database
 
         res.status(200).json({
             message: 'Kết nối thành công!',
-            data:true
         });
     } catch (err) {
         res.status(500).json({
@@ -45,7 +44,6 @@ app.post('/ce', async (_req, res) => {// route tạo bảng
 
         res.status(200).json({
             message: 'Tạo bảng thành công!',
-            data:true
         });
     } catch (err) {
         res.status(500).json({
@@ -62,7 +60,6 @@ app.post('/rr', async (req, res) => {// route đăng ký user
 
         res.status(200).json({
             message: 'Thêm tài khoản thành công',
-            data:true
         });
     } catch (err) {
         res.status(500).json({
