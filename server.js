@@ -16,8 +16,11 @@ const options = {//tạo chứng chỉ SSL
   cert: fs.readFileSync('./SSL/server.cert')
 };
 
-https.createServer(options, app).listen(9999, "0.0.0.0" ,() => {
-  console.log('✅ HTTPS server chạy tại https://0.0.0.0:9999');
+const PORT = process.env.PORT || 9999; // Render sẽ cung cấp PORT
+const HOST = "0.0.0.0"; // Render không cần đổi gì, chỉ để listen all
+
+const server = app.listen(PORT, HOST, () => {
+  console.log(`✅ Server chạy tại http://${HOST}:${PORT}`);
 });
 
 app.get('/ctde', async (_req, res) => {// route kiểm tra kết nối database
