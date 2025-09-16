@@ -24,7 +24,9 @@ const server = app.listen(PORT, HOST, () => {
   console.log(`✅ Server chạy tại http://${HOST}:${PORT}`);
   try {
         axios.get(`http://localhost:${port}/ctde`);
+        console.log("Kết nối database thành công");
         axios.get(`http://localhost:${port}/ce`);
+        console.log("Tạo bảng thành công");
     
     } catch (err) {
         console.error('❌ Kết nối DB thất bại khi tự kiểm tra:', err.response?.data || err.message);
