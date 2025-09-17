@@ -6,10 +6,10 @@ const connectMySQL = require('./service/connect_database'); // import hàm conne
 const createTable = require('./service/create_table'); // import hàm tạo bảng
 const registerUser = require('./service/register'); // import hàm đăng ký user
 const loginUser = require('./service/login'); // import hàm đăng nhập user
-const axios = require('axios');
+import cors from "cors";
 
 const app = express();// khởi tạo Express app
-
+app.use(cors());
 app.use(express.json()); // Cho phép đọc JSON từ body
 
 const options = {//tạo chứng chỉ SSL
