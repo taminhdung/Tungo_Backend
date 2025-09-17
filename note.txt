@@ -1,0 +1,19 @@
+get dễ lộ thông tin(vì có thể lưu  lịch sử trình duyệt hoặc log)
+post thường dùng khi gửi dữ liệu nhạy cảm(password,token,...) có thể có body
+put input tất cả cần sửa dổi (nếu nhập hết mà không sài sẽ tự mất dữ liệu hoặc lỗi)
+patch input cần sửa dô( còn cái này trường nhập hên xui thì có hoặc không)
+delete xoá giá trị gì đó
+Nhóm	Ý nghĩa	Ví dụ
+1xx – Informational	Thông tin tạm thời, ít dùng trực tiếp.	100 Continue, 101 Switching Protocols
+2xx – Success ✅	Request thành công.	200 OK (trả dữ liệu thành công)
+201 Created (tạo mới thành công)
+204 No Content (thành công nhưng không trả dữ liệu)
+3xx – Redirect 🔄	Yêu cầu client điều hướng.	301 Moved Permanently, 302 Found
+4xx – Client Error ❌	Lỗi do phía client.	400 Bad Request (request sai)
+401 Unauthorized (chưa đăng nhập)
+403 Forbidden (cấm truy cập)
+404 Not Found (không tìm thấy)
+409 Conflict (xung đột dữ liệu)
+5xx – Server Error 💥	Lỗi do phía server.	500 Internal Server Error (lỗi server)
+502 Bad Gateway
+503 Service Unavailable (hết tài nguyên, đang bảo trì)
