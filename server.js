@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 9999; // Render sẽ cung cấp PORT
 const HOST = "0.0.0.0"; // Render không cần đổi gì, chỉ để listen all
 
 const server = app.listen(PORT, HOST, () => {
-    console.log(`✅ Server chạy tại http://${HOST}:${PORT}.`);
+    console.log(`✅ Server chạy tại http://${HOST}:${PORT}/`);
 
     // Tạo hàm async để gọi các hàm async và bắt lỗi
     async function init() {
