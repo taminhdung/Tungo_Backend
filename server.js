@@ -109,7 +109,7 @@ app.post('/ln', async (req, res) => {// route đăng nhập user
     const refresh_access = jwt.sign({ id: data_value.id, username: data_value.username }, Refresh_key, { expiresIn: "7d" });
     if (rows.length > 0) {
         res.status(200).json({
-            message: '✅ Đăng nhập thành công.',
+            message: '✅ Đăng nhập tài khoản thành công.',
             id: data_value.id,
             username: data_value.username,
             token_access: token_access,
@@ -117,7 +117,7 @@ app.post('/ln', async (req, res) => {// route đăng nhập user
         });
     } else {
         res.status(401).json({
-            message: `❌ Đăng nhập thất bại.\n Báo lỗi: ${err.message}`,
+            message: `❌ Đăng nhập tài khoản thất bại.\n Báo lỗi: ${err.message}`,
         });
     }
 });
