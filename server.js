@@ -7,6 +7,9 @@ const createTable = require('./service/create_table'); // import hàm tạo bả
 const registerUser = require('./service/register'); // import hàm đăng ký user
 const loginUser = require('./service/login'); // import hàm đăng nhập user
 const cors = require("cors");
+const swaggerSpec = require("./docs/swagger");
+const userRoutes = require("./routes/user");
+const swaggerUi = require('swagger-ui-express');
 
 const app = express();// khởi tạo Express app
 app.use(cors({
@@ -15,19 +18,31 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"],
 }));
 app.use(express.json()); // Cho phép đọc JSON từ body
+app.use("/", userRoutes);
+
+// Dùng Swagger docs
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    swaggerOptions: {
+      layout: "BaseLayout"
+    },
+  })
+);
 
 const options = {//tạo chứng chỉ SSL
     key: fs.readFileSync('./SSL/server.key'),
     cert: fs.readFileSync('./SSL/server.cert')
 };
 
-const PORT = process.env.PORT || 9999; // Render sẽ cung cấp PORT
-const HOST = "0.0.0.0"; // Render không cần đổi gì, chỉ để listen all
+const PORT = process.env.PORT || 9999;
+const HOST = "localhost";
 
-const server = app.listen(PORT, HOST, () => {
-    console.log(`✅ Server chạy tại http://${HOST}:${PORT}/`);
+const server = https.createServer(options, app).listen(PORT, HOST, () => {
+    console.log(`✅ Server chạy HTTPS tại https://${HOST}:${PORT}/api-docs`);
 
-    // Tạo hàm async để gọi các hàm async và bắt lỗi
+    // Hàm khởi tạo DB
     async function init() {
         try {
             await connectMySQL();
@@ -44,9 +59,8 @@ const server = app.listen(PORT, HOST, () => {
         }
     }
 
-    init(); // gọi hàm async
+    init();
 });
-
 app.get('/ctde', async (_req, res) => {// route kiểm tra kết nối database
     try {
         const connect = await connectMySQL();
