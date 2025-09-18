@@ -1,5 +1,4 @@
 const express = require('express');
-const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const connectMySQL = require('./service/connect_database'); // import hàm connect
 const createTable = require('./service/create_table'); // import hàm tạo bảng

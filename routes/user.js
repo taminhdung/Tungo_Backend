@@ -1,9 +1,9 @@
-const express = require("express");
-const router = express.Router();
-const connectMySQL = require('./service/connect_database'); // import hàm connect
-const createTable = require('./service/create_table'); // import hàm tạo bảng
-const registerUser = require('./service/register'); // import hàm đăng ký user
-const loginUser = require('./service/login'); // import hàm đăng nhập user
+// const express = require("express");
+// const router = express.Router();
+// const connectMySQL = require('./service/connect_database'); // import hàm connect
+// const createTable = require('./service/create_table'); // import hàm tạo bảng
+// const registerUser = require('./service/register'); // import hàm đăng ký user
+// const loginUser = require('./service/login'); // import hàm đăng nhập user
 /**
  * @swagger
  *  tags:
@@ -170,7 +170,7 @@ const loginUser = require('./service/login'); // import hàm đăng nhập user
  */
 router.get("/cdce", (_req, res) => {
     try {
-        connectMySQL()
+        // connectMySQL()
         res.status(200).json({
             message: '✅ Kết nối database thành công.',
         });
@@ -182,7 +182,7 @@ router.get("/cdce", (_req, res) => {
 });
 router.post("/cdce", (_req, res) => {
     try {
-        createTable()
+        // createTable()
         res.status(200).json({
             message: '✅ Kết nối database thành công.',
         });
@@ -194,7 +194,7 @@ router.post("/cdce", (_req, res) => {
 });
 router.post("rr", (_req, res) => { 
     try {
-        registerUser("nguyenvana", "123456", "nguyenvana@gmail.com");
+        // registerUser("nguyenvana", "123456", "nguyenvana@gmail.com");
 
         res.status(201).json({
             message: '✅ Thêm tài khoản thành công.',
