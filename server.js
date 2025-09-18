@@ -1,6 +1,6 @@
 const express = require('express');
 const fs = require('fs');
-const https = require('https');//import https
+// const https = require('https');//import https
 const jwt = require('jsonwebtoken');
 const connectMySQL = require('./service/connect_database'); // import hàm connect
 const createTable = require('./service/create_table'); // import hàm tạo bảng
@@ -36,13 +36,13 @@ const options = {//tạo chứng chỉ SSL
     cert: fs.readFileSync('./SSL/server.cert')
 };
 
-const PORT = process.env.PORT || 9999;
-const HOST = "localhost";
+const PORT = process.env.PORT || 9999; // Render sẽ cung cấp PORT
+const HOST = "localhost"; // Render không cần đổi gì, chỉ để listen all
 
-const server = https.createServer(options, app).listen(PORT, HOST, () => {
-    console.log(`✅ Server chạy HTTPS tại https://${HOST}:${PORT}/api-docs`);
+const server = app.listen(PORT, HOST, () => {
+    console.log(`✅ Server chạy tại http://${HOST}:${PORT}/api-docs`);
 
-    // Hàm khởi tạo DB
+    // Tạo hàm async để gọi các hàm async và bắt lỗi
     async function init() {
         try {
             await connectMySQL();
@@ -59,8 +59,9 @@ const server = https.createServer(options, app).listen(PORT, HOST, () => {
         }
     }
 
-    init();
+    init(); // gọi hàm async
 });
+
 app.get('/ctde', async (_req, res) => {// route kiểm tra kết nối database
     try {
         const connect = await connectMySQL();
