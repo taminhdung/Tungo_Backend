@@ -72,26 +72,26 @@ const jwt = require('jsonwebtoken');
  *   post:
  *      summary: Kiểm tra tạo tài khoản
  *      tags: [Người dùng]
- *   requestBody:
- *      required: true
- *      content:
- *          application/json:
- *              schema:
- *                  type: object
- *                  required:
- *                      - username
- *                      - password
- *                      - email
- *              properties:
- *                  username:
- *                      type: string
- *                      example: "nguyenvana"
- *                  password:
- *                      type: string
- *                      example: "123456"
- *                  email:
- *                      type: string
- *                      example: "nguyenvana"
+ *      requestBody:
+ *         required: true
+ *         content:
+ *             application/json:
+ *                 schema:
+ *                     type: object
+ *                     required:
+ *                         - username
+ *                         - password
+ *                         - email
+ *                 properties:
+ *                     username:
+ *                         type: string
+ *                         example: "nguyenvana"
+ *                     password:
+ *                         type: string
+ *                         example: "123456"
+ *                     email:
+ *                         type: string
+ *                         example: "nguyenvana"
  *      responses:
  *          200:
  *              description: Tạo thành công
@@ -117,24 +117,24 @@ const jwt = require('jsonwebtoken');
  *   post:
  *      summary: Kiểm tra đăng nhập tài khoản
  *      tags: [Người dùng]
- *   requestBody:
- *      required: true
- *      content:
- *          application/json:
- *              schema:
- *                  type: object
- *                  required:
- *                      - username
- *                      - password
- *              properties:
- *                  username:
- *                      type: string
- *                      example: "nguyenvana"
- *                  password:
- *                      type: string
- *                      example: "123456"
- *                  email:
- *                      type: string
+ *      requestBody:
+ *         required: true
+ *         content:
+ *             application/json:
+ *                 schema:
+ *                     type: object
+ *                     required:
+ *                         - username
+ *                         - password
+ *                 properties:
+ *                     username:
+ *                         type: string
+ *                         example: "nguyenvana"
+ *                     password:
+ *                         type: string
+ *                         example: "123456"
+ *                     email:
+ *                         type: string
  *      responses:
  *          200:
  *              description: Đăng nhập thành công
