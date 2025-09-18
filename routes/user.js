@@ -203,7 +203,7 @@ router.post("/cdce", (_req, res) => {
         });
     }
 });
-router.post("rr", (_req, res) => { 
+router.post("/rr", (_req, res) => { 
     try {
         registerUser("nguyenvana", "123456", "nguyenvana@gmail.com");
         res.status(201).json({
@@ -215,7 +215,7 @@ router.post("rr", (_req, res) => {
         });
     }
 });
-router.post("ln", (_req, res) => { 
+router.post("/ln", (_req, res) => { 
     try {
         const rows = loginUser(username, password);
         const data_value = rows[0][0];
