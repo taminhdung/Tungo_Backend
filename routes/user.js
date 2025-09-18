@@ -35,7 +35,7 @@ const router = express.Router();
  * tags:
  *      name: Bảng
  *      description: Quản lý bảng 
- * cete:
+ * /cete:
  *   post:
  *      summary: Kiểm tra tạo bảng
  *      tags: [Bảng]
