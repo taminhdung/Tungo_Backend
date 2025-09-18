@@ -6,7 +6,7 @@ const connectMySQL = require('./service/connect_database'); // import hàm conne
 const createTable = require('./service/create_table'); // import hàm tạo bảng
 const registerUser = require('./service/register'); // import hàm đăng ký user
 const loginUser = require('./service/login'); // import hàm đăng nhập user
-import cors from "cors";
+const cors = require("cors");
 
 const app = express();// khởi tạo Express app
 app.use(cors({
