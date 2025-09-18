@@ -3,7 +3,7 @@ const router = express.Router();
 const connectMySQL = require('../service/connect_database');
 const createTable = require('../service/create_table'); // import hàm tạo bảng
 const registerUser = require('../service/register'); // import hàm đăng ký user
-const loginUser = require('./service/login'); // import hàm đăng nhập user
+const loginUser = require('../service/login'); // import hàm đăng nhập user
 const jwt = require('jsonwebtoken');
 /**
  * @swagger
