@@ -13,51 +13,46 @@ const swaggerUi = require('swagger-ui-express');
 
 const app = express();// khởi tạo Express app
 app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
 }));
 app.use(express.json()); // Cho phép đọc JSON từ body
 app.use("/", userRoutes);
 // Dùng Swagger docs
 app.use(
-  "/api-docs",
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerSpec, {
-    swaggerOptions: {
-      layout: "BaseLayout"
-    },
-  })
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, {
+        swaggerOptions: {
+            layout: "BaseLayout"
+        },
+    })
 );
 
-const options = {//tạo chứng chỉ SSL
-    key: fs.readFileSync('./SSL/server.key'),
-    cert: fs.readFileSync('./SSL/server.cert')
-};
 
 const PORT = process.env.PORT || 9999; // Render sẽ cung cấp PORT
-const HOST = "localhost"; // Render không cần đổi gì, chỉ để listen all
 
-app.listen(PORT, HOST, () => {
-  console.log(`✅ Server chạy tại https://tungo-backend.onrender.com/api-docs`);
+app.listen(PORT, () => {
+    console.log(`✅ Server chạy tại https://tungo-backend.onrender.com/api-docs`);
 
-  async function init() {
-    try {
-      await connectMySQL();
-      console.log('✅ Kết nối database thành công.');
-    } catch (err) {
-      console.error(`❌ Kết nối database thất bại.\n Báo lỗi: ${err.message}`);
+    async function init() {
+        try {
+            await connectMySQL();
+            console.log('✅ Kết nối database thành công.');
+        } catch (err) {
+            console.error(`❌ Kết nối database thất bại.\n Báo lỗi: ${err.message}`);
+        }
+
+        try {
+            await createTable();
+            console.log('✅ Tạo bảng thành công.');
+        } catch (err) {
+            console.error(`❌ Tạo bảng thất bại.\n Báo lỗi: ${err.message}`);
+        }
     }
 
-    try {
-      await createTable();
-      console.log('✅ Tạo bảng thành công.');
-    } catch (err) {
-      console.error(`❌ Tạo bảng thất bại.\n Báo lỗi: ${err.message}`);
-    }
-  }
-
-  init();
+    init();
 });
 
 
