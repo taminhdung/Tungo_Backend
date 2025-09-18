@@ -99,37 +99,49 @@ app.post('/rr', async (req, res) => {// route đăng ký user
 });
 
 app.post('/ln', async (req, res) => {// route đăng nhập user
-    const { username, password } = req.body;
-    const rows = await loginUser(username, password);
-    const data_value = rows[0][0];
-    const Secure_key = `${Math.floor(Math.random() * 9007199254740991)}`;
-    const Refresh_key = `${Math.floor(Math.random() * -9007199254740991)}`;
-    const token_access = jwt.sign({ id: data_value.id, username: data_value.username }, Secure_key, { expiresIn: "15m" });
-    const refresh_access = jwt.sign({ id: data_value.id, username: data_value.username }, Refresh_key, { expiresIn: "7d" });
-    if (rows.length > 0) {
-        res.status(200).json({
-            message: '✅ Đăng nhập tài khoản thành công.',
-            id: data_value.id,
-            username: data_value.username,
-            token_access: token_access,
-            refresh_access: refresh_access,
-        });
-    } else {
-        res.status(401).json({
-            message: `❌ Đăng nhập tài khoản thất bại.\n Báo lỗi: ${err.message}`,
+    try {
+        const { username, password } = req.body;
+        const rows = loginUser(username, password);
+        const data_value = rows[0][0];
+        const Secure_key = `${Math.floor(Math.random() * 9007199254740991)}`;
+        const Refresh_key = `${Math.floor(Math.random() * -9007199254740991)}`;
+        const token_access = jwt.sign({ id: data_value.id, username: data_value.username }, Secure_key, { expiresIn: "15m" });
+        const refresh_access = jwt.sign({ id: data_value.id, username: data_value.username }, Refresh_key, { expiresIn: "7d" });
+        if (rows.length > 0) {
+            res.status(200).json({
+                message: '✅ Đăng nhập tài khoản thành công.',
+                id: data_value.id,
+                username: data_value.username,
+                token_access: token_access,
+                refresh_access: refresh_access,
+            });
+        } else {
+            res.status(401).json({
+                message: `❌ Đăng nhập tài khoản thất bại.\n Báo lỗi: Sai tên đăng nhập hoặc mật khẩu.`,
+            });
+        }
+    } catch (err) {
+        res.status(500).json({
+            message: `❌ Thêm tài khoản thât bại.\n Báo lỗi: ${err.message}`,
         });
     }
 });
 
 app.post('/lt', async (req, res) => {// route đăng xuất user
-    const { id, username } = req.body;
-    const Secure_key = `${Math.floor(Math.random() * 9007199254740991)}`;
-    const Refresh_key = `${Math.floor(Math.random() * -9007199254740991)}`;
-    const token_access = jwt.sign({ id: id, username: username }, Secure_key, { expiresIn: "0s" });
-    const refresh_access = jwt.sign({ id: id, username: username }, Refresh_key, { expiresIn: "0s" });
-    res.status(200).json({
-        message: '✅ Đăng xuất thành công.',
-        token_access: token_access,
-        refresh_access: refresh_access,
-    });
+    try{
+        const { id, username } = req.body;
+        const Secure_key = `${Math.floor(Math.random() * 9007199254740991)}`;
+        const Refresh_key = `${Math.floor(Math.random() * -9007199254740991)}`;
+        const token_access = jwt.sign({ id: id, username: username }, Secure_key, { expiresIn: "0s" });
+        const refresh_access = jwt.sign({ id: id, username: username }, Refresh_key, { expiresIn: "0s" });
+        res.status(200).json({
+            message: '✅ Đăng xuất thành công.',
+            token_access: token_access,
+            refresh_access: refresh_access,
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: `❌ Đăng xuất không thành công.\n Báo lỗi: ${err.message}`,
+        });
+    }
 });

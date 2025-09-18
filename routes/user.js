@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
-// const connectMySQL = require('./service/connect_database');
-// const createTable = require('./service/create_table'); // import hàm tạo bảng
-// const registerUser = require('./service/register'); // import hàm đăng ký user
-// const loginUser = require('./service/login'); // import hàm đăng nhập user
+const connectMySQL = require('./service/connect_database');
+const createTable = require('./service/create_table'); // import hàm tạo bảng
+const registerUser = require('./service/register'); // import hàm đăng ký user
+const loginUser = require('./service/login'); // import hàm đăng nhập user
+const jwt = require('jsonwebtoken');
 /**
  * @swagger
  *  tags:
@@ -145,16 +146,6 @@ const router = express.Router();
  *                              message:
  *                                  type: string
  *                                  example: "✅ Đăng nhập tài khoản thành công."
- *          500:
- *              description: Đăng nhập thất bại
- *              content:
- *                  application/json:
- *                      schema:
- *                          type: object
- *                          properties:
- *                              message:
- *                                  type: string
- *                                  example: "❌ Đăng nhập tài khoản thất bại.\n Báo lỗi: <lỗi cụ thể>"
  *                              id:
  *                                  type: integer
  *                                  example: 1
@@ -167,10 +158,30 @@ const router = express.Router();
  *                              refresh_access:
  *                                  type: string
  *                                  example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *          401:
+ *              description: Đăng nhập thất bại
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              message:
+ *                                  type: string
+ *                                  example: "❌ Đăng nhập tài khoản thất bại.\n Báo lỗi: Sai tên đăng nhập hoặc mật khẩu."
+ *          500:
+ *              description: Đăng nhập thất bại
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              message:
+ *                                  type: string
+ *                                  example: "❌ Đăng nhập tài khoản thất bại.\n Báo lỗi: <lỗi cụ thể>"
  */
 router.get("/cdce", (_req, res) => {
     try {
-        // connectMySQL()
+        connectMySQL();
         res.status(200).json({
             message: '✅ Kết nối database thành công.',
         });
@@ -182,7 +193,7 @@ router.get("/cdce", (_req, res) => {
 });
 router.post("/cdce", (_req, res) => {
     try {
-        // createTable()
+        createTable();
         res.status(200).json({
             message: '✅ Kết nối database thành công.',
         });
@@ -194,11 +205,37 @@ router.post("/cdce", (_req, res) => {
 });
 router.post("rr", (_req, res) => { 
     try {
-        // registerUser("nguyenvana", "123456", "nguyenvana@gmail.com");
-
+        registerUser("nguyenvana", "123456", "nguyenvana@gmail.com");
         res.status(201).json({
             message: '✅ Thêm tài khoản thành công.',
         });
+    } catch (err) {
+        res.status(500).json({
+            message: `❌ Thêm tài khoản thât bại.\n Báo lỗi: ${err.message}`,
+        });
+    }
+});
+router.post("ln", (_req, res) => { 
+    try {
+        const rows = loginUser(username, password);
+        const data_value = rows[0][0];
+        const Secure_key = `${Math.floor(Math.random() * 9007199254740991)}`;
+        const Refresh_key = `${Math.floor(Math.random() * -9007199254740991)}`;
+        const token_access = jwt.sign({ id: data_value.id, username: data_value.username }, Secure_key, { expiresIn: "15m" });
+        const refresh_access = jwt.sign({ id: data_value.id, username: data_value.username }, Refresh_key, { expiresIn: "7d" });
+        if (rows.length > 0) {
+            res.status(200).json({
+                message: '✅ Đăng nhập tài khoản thành công.',
+                id: data_value.id,
+                username: data_value.username,
+                token_access: token_access,
+                refresh_access: refresh_access,
+            });
+        } else {
+            res.status(401).json({
+                message: `❌ Đăng nhập tài khoản thất bại.\n Báo lỗi: Sai tên đăng nhập hoặc mật khẩu.`,
+            });
+        }
     } catch (err) {
         res.status(500).json({
             message: `❌ Thêm tài khoản thât bại.\n Báo lỗi: ${err.message}`,
