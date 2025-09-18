@@ -1,5 +1,6 @@
 // docs/swagger.js
 const swaggerJsdoc = require("swagger-jsdoc");
+const server= require("../server.js");
 
 const options = {
   definition: {
@@ -11,13 +12,13 @@ const options = {
     },
     servers: [
       {
-        url: "https://tungo-backend.onrender.com",
-        description: "Render HTTPS server",
+        url: "http://localhost:10000",
+        description: "Server localhost api",
       },
-      // {
-      //   url: "http://localhost:3000",
-      //   description: "Local dev server",
-      // },
+      {
+        url: "http://localhost:9999",
+        description: "Server localhost máy",
+      },
     ]
 
   },

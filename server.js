@@ -32,10 +32,31 @@ app.use(
 
 const PORT = process.env.PORT || 9999; // Render sẽ cung cấp PORT
 
-app.listen(PORT, () => {
-    console.log(`✅ Server chạy tại https://tungo-backend.onrender.com/api-docs`);
+// app.listen(PORT, () => {
+//     console.log(`✅ Server chạy tại https://tungo-backend.onrender.com/api-docs`);
 
-    async function init() {
+//     async function init() {
+//         try {
+//             await connectMySQL();
+//             console.log('✅ Kết nối database thành công.');
+//         } catch (err) {
+//             console.error(`❌ Kết nối database thất bại.\n Báo lỗi: ${err.message}`);
+//         }
+
+//         try {
+//             await createTable();
+//             console.log('✅ Tạo bảng thành công.');
+//         } catch (err) {
+//             console.error(`❌ Tạo bảng thất bại.\n Báo lỗi: ${err.message}`);
+//         }
+//     }
+
+//     init();
+// });
+const HOST = "localhost"
+app.listen(PORT, HOST, () => {
+    console.log(`✅ Server đang chạy tại http://${HOST}:${PORT}/api-docs`);
+        async function init() {
         try {
             await connectMySQL();
             console.log('✅ Kết nối database thành công.');
@@ -122,7 +143,7 @@ app.post('/ln', async (req, res) => {// route đăng nhập user
         }
     } catch (err) {
         res.status(500).json({
-            message: `❌ Thêm tài khoản thât bại.\n Báo lỗi: ${err.message}`,
+            message: `❌ Đăng nhập tài khoản thât bại.\n Báo lỗi: ${err.message}`,
         });
     }
 });

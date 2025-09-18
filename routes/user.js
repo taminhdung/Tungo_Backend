@@ -85,13 +85,14 @@ const jwt = require('jsonwebtoken');
  *                 properties:
  *                     username:
  *                         type: string
- *                         example: "nguyenvana"
  *                     password:
  *                         type: string
- *                         example: "123456"
  *                     email:
  *                         type: string
- *                         example: "nguyenvana"
+ *                 example: 
+ *                     username: "nguyenvana"
+ *                     password: "123456"
+ *                     email: "nguyenvana@gmail.com"
  *      responses:
  *          200:
  *              description: Tạo thành công
@@ -129,12 +130,11 @@ const jwt = require('jsonwebtoken');
  *                 properties:
  *                     username:
  *                         type: string
- *                         example: "nguyenvana"
  *                     password:
  *                         type: string
- *                         example: "123456"
- *                     email:
- *                         type: string
+ *                 example: 
+ *                     username: "nguyenvana"
+ *                     password: "123456"
  *      responses:
  *          200:
  *              description: Đăng nhập thành công
@@ -179,9 +179,9 @@ const jwt = require('jsonwebtoken');
  *                                  type: string
  *                                  example: "❌ Đăng nhập tài khoản thất bại.\n Báo lỗi: <lỗi cụ thể>"
  */
-router.get("/cdce", (_req, res) => {
+router.get("/cdce", async (_req, res) => {
     try {
-        connectMySQL();
+        await connectMySQL();
         res.status(200).json({
             message: '✅ Kết nối database thành công.',
         });
@@ -191,9 +191,9 @@ router.get("/cdce", (_req, res) => {
         });
     }
 });
-router.post("/cdce", (_req, res) => {
+router.post("/cdce", async (_req, res) => {
     try {
-        createTable();
+        await createTable();
         res.status(200).json({
             message: '✅ Kết nối database thành công.',
         });
@@ -203,11 +203,11 @@ router.post("/cdce", (_req, res) => {
         });
     }
 });
-router.post("/rr", (_req, res) => { 
+router.post("/rr", async (_req, res) => { 
     try {
-        registerUser("nguyenvana", "123456", "nguyenvana@gmail.com");
+        await registerUser("nguyenvana", "123456", "nguyenvana@gmail.com");
         res.status(201).json({
-            message: '✅ Thêm tài khoản thành công.',
+            message: '✅ Thêm tài khoản thành công.qqq',
         });
     } catch (err) {
         res.status(500).json({
@@ -215,14 +215,15 @@ router.post("/rr", (_req, res) => {
         });
     }
 });
-router.post("/ln", (_req, res) => { 
+router.post("/ln", async (_req, res) => { 
     try {
-        const rows = loginUser(username, password);
+        const rows = await loginUser("nguyenvana","123456");
         const data_value = rows[0][0];
         const Secure_key = `${Math.floor(Math.random() * 9007199254740991)}`;
         const Refresh_key = `${Math.floor(Math.random() * -9007199254740991)}`;
         const token_access = jwt.sign({ id: data_value.id, username: data_value.username }, Secure_key, { expiresIn: "15m" });
         const refresh_access = jwt.sign({ id: data_value.id, username: data_value.username }, Refresh_key, { expiresIn: "7d" });
+        console.log(`data=${data_value}`);
         if (rows.length > 0) {
             res.status(200).json({
                 message: '✅ Đăng nhập tài khoản thành công.',
@@ -238,7 +239,7 @@ router.post("/ln", (_req, res) => {
         }
     } catch (err) {
         res.status(500).json({
-            message: `❌ Thêm tài khoản thât bại.\n Báo lỗi: ${err.message}`,
+            message: `❌ Đăng nhập tài khoản thât bại.\n Báo lỗi: ${err.message}`,
         });
     }
 });
