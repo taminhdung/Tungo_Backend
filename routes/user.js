@@ -3,13 +3,13 @@ const router = express.Router();
 
 /**
  * @swagger
- * tags:
- *   name: Database
- *   description: Quản lý Database
+ *  tags:
+ *      name: Dữ liệu
+ *      description: Quản lý dữ liệu
  * /ctde:
  *   get:
- *      summary: Kiểm tra kết nối Database
- *      tags: [Database]
+ *      summary: Kiểm tra kết nối dữ liệu
+ *      tags: [Dữ liệu]
  *      responses:
  *          200:
  *              description: Kết nối thành công
@@ -20,7 +20,7 @@ const router = express.Router();
  *                          properties:
  *                              message:
  *                                  type: string
- *                                  example: "✅ Kết nối database thành công."
+ *                                  example: "✅ Kết nối dữ liệu thành công."
  *          500:
  *              description: Kết nối thất bại
  *              content:
@@ -30,27 +30,36 @@ const router = express.Router();
  *                          properties:
  *                              message:
  *                                  type: string
- *                                  example: "❌ Kết nối database thất bại.\n Báo lỗi: <lỗi cụ thể>"
-    
+ *                                  example: "❌ Kết nối dữ liệu thất bại.\n Báo lỗi: <lỗi cụ thể>"
  * @swagger
- * /users:
- *   get:
- *     summary: Lấy danh sách user
- *     tags: [Users]
- *     responses:
- *       200:
- *         description: Danh sách user
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   name:
- *                     type: string
+ * tags:
+ *      name: Bảng
+ *      description: Quản lý bảng 
+ * cete:
+ *   post:
+ *      summary: Kiểm tra tạo bảng
+ *      tags: [Bảng]
+ *      responses:
+ *          200:
+ *              description: Tạo thành công
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              message:
+ *                                  type: string
+ *                                  example: "✅ Tạo bảng thành công."
+ *          500:
+ *              description: Tạo thất bại
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              message:
+ *                                  type: string
+ *                                  example: "❌ Tạo bảng thất bại.\n Báo lỗi: <lỗi cụ thể>"
  */
 router.get("/cdce", (_req, res) => {
     try {
@@ -63,8 +72,19 @@ router.get("/cdce", (_req, res) => {
         });
     }
 });
-router.get("/ln", (req, res) => {
-    res.json([{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }]);
+router.post("/cdce", (_req, res) => {
+    try {
+        res.status(200).json({
+            message: '✅ Kết nối database thành công.',
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: `❌ Kết nối database thất bại.\n Báo lỗi: ${err.message}`,
+        });
+    }
 });
+// router.get("/ln", (req, res) => {
+//     res.json([{ id: 1, name: "Alice" }, { id: 2, name: "Bob" }]);
+// });
 
 module.exports = router;
