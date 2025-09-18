@@ -203,9 +203,10 @@ router.post("/cdce", async (_req, res) => {
         });
     }
 });
-router.post("/rr", async (_req, res) => { 
+router.post("/rr", async (req, res) => { 
     try {
-        await registerUser("nguyenvana", "123456", "nguyenvana@gmail.com");
+        const { username, password,email} = req.body;
+        await registerUser(username, password,email);
         res.status(201).json({
             message: '✅ Thêm tài khoản thành công.qqq',
         });
@@ -215,12 +216,13 @@ router.post("/rr", async (_req, res) => {
         });
     }
 });
-router.post("/ln", async (_req, res) => { 
+router.post("/ln", async (req, res) => { 
     try {
-        const rows = await loginUser("nguyenvana","123456");
+        const { username, password} = req.body;
+        const rows = await loginUser(username, password);
         const data_value = rows[0][0];
-        const Secure_key = `${Math.floor(Math.random() * 9007199254740991)}`;
-        const Refresh_key = `${Math.floor(Math.random() * -9007199254740991)}`;
+        const Secure_key = "9007199254740991";
+        const Refresh_key = "-9007199254740991";
         const token_access = jwt.sign({ id: data_value.id, username: data_value.username }, Secure_key, { expiresIn: "15m" });
         const refresh_access = jwt.sign({ id: data_value.id, username: data_value.username }, Refresh_key, { expiresIn: "7d" });
         console.log(`data=${data_value}`);
