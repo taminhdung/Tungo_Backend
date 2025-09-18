@@ -168,30 +168,42 @@ const loginUser = require('./service/login'); // import hàm đăng nhập user
  *                                  type: string
  *                                  example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
  */
-// router.get("/cdce", (_req, res) => {
-//     try {
-//         res.status(200).json({
-//             message: '✅ Kết nối database thành công.',
-//         });
-//     } catch (err) {
-//         res.status(500).json({
-//             message: `❌ Kết nối database thất bại.\n Báo lỗi: ${err.message}`,
-//         });
-//     }
-// });
-// router.post("/cdce", (_req, res) => {
-//     try {
-//         res.status(200).json({
-//             message: '✅ Kết nối database thành công.',
-//         });
-//     } catch (err) {
-//         res.status(500).json({
-//             message: `❌ Kết nối database thất bại.\n Báo lỗi: ${err.message}`,
-//         });
-//     }
-// });
-// router.post("rr", (_req, res) => {
-//     registerUser("nguyenvana", password, email);
-// });
+router.get("/cdce", (_req, res) => {
+    try {
+        connectMySQL()
+        res.status(200).json({
+            message: '✅ Kết nối database thành công.',
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: `❌ Kết nối database thất bại.\n Báo lỗi: ${err.message}`,
+        });
+    }
+});
+router.post("/cdce", (_req, res) => {
+    try {
+        createTable()
+        res.status(200).json({
+            message: '✅ Kết nối database thành công.',
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: `❌ Kết nối database thất bại.\n Báo lỗi: ${err.message}`,
+        });
+    }
+});
+router.post("rr", (_req, res) => { 
+    try {
+        registerUser("nguyenvana", "123456", "nguyenvana@gmail.com");
+
+        res.status(201).json({
+            message: '✅ Thêm tài khoản thành công.',
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: `❌ Thêm tài khoản thât bại.\n Báo lỗi: ${err.message}`,
+        });
+    }
+});
 
 module.exports = router;
