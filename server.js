@@ -1,6 +1,6 @@
 const express = require('express');
 const fs = require('fs');
-// const https = require('https');//import https
+const https = require('https');//import https
 const jwt = require('jsonwebtoken');
 const connectMySQL = require('./service/connect_database'); // import hàm connect
 const createTable = require('./service/create_table'); // import hàm tạo bảng
@@ -39,27 +39,29 @@ const options = {//tạo chứng chỉ SSL
 const PORT = process.env.PORT || 9999; // Render sẽ cung cấp PORT
 const HOST = "localhost"; // Render không cần đổi gì, chỉ để listen all
 
-const server = app.listen(PORT, HOST, () => {
-    console.log(`✅ Server chạy tại http://${HOST}:${PORT}/api-docs`);
+const server = https.createServer(options, app);
 
-    // Tạo hàm async để gọi các hàm async và bắt lỗi
-    async function init() {
-        try {
-            await connectMySQL();
-            console.log('✅ Kết nối database thành công.');
-        } catch (err) {
-            console.error(`❌ Kết nối database thất bại.\n Báo lỗi: ${err.message}`);
-        }
+server.listen(PORT, HOST, () => {
+  console.log(`✅ Server HTTPS chạy tại https://${HOST}:${PORT}/api-docs`);
 
-        try {
-            await createTable();
-            console.log('✅ Tạo bảng thành công.');
-        } catch (err) {
-            console.error(`❌ Tạo bảng thất bại.\n Báo lỗi: ${err.message}`);
-        }
+  // Hàm async init
+  async function init() {
+    try {
+      await connectMySQL();
+      console.log('✅ Kết nối database thành công.');
+    } catch (err) {
+      console.error(`❌ Kết nối database thất bại.\n Báo lỗi: ${err.message}`);
     }
 
-    init(); // gọi hàm async
+    try {
+      await createTable();
+      console.log('✅ Tạo bảng thành công.');
+    } catch (err) {
+      console.error(`❌ Tạo bảng thất bại.\n Báo lỗi: ${err.message}`);
+    }
+  }
+
+  init();
 });
 
 app.get('/ctde', async (_req, res) => {// route kiểm tra kết nối database
