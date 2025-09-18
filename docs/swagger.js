@@ -12,8 +12,8 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:10000",
-        description: "Server localhost api",
+        url: "https://tungo-backend.onrender.com",
+        description: "Server host api",
       },
       {
         url: "http://localhost:9999",

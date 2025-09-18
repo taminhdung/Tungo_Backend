@@ -17,7 +17,6 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
 app.use(express.json()); // Cho phép đọc JSON từ body
-app.use("/", userRoutes);
 // Dùng Swagger docs
 app.use(
     "/api-docs",
@@ -28,36 +27,14 @@ app.use(
         },
     })
 );
-
+app.use("/", userRoutes);
 
 const PORT = process.env.PORT || 9999; // Render sẽ cung cấp PORT
 
-app.listen(PORT, () => {
-    console.log(`✅ Server chạy tại https://tungo-backend.onrender.com/api-docs`);
+// app.listen(PORT, () => {
+//     console.log(`✅ Server chạy tại https://tungo-backend.onrender.com/api-docs`);
 
-    async function init() {
-        try {
-            await connectMySQL();
-            console.log('✅ Kết nối database thành công.');
-        } catch (err) {
-            console.error(`❌ Kết nối database thất bại.\n Báo lỗi: ${err.message}`);
-        }
-
-        try {
-            await createTable();
-            console.log('✅ Tạo bảng thành công.');
-        } catch (err) {
-            console.error(`❌ Tạo bảng thất bại.\n Báo lỗi: ${err.message}`);
-        }
-    }
-
-    init();
-});
-
-// const HOST = "localhost"
-// app.listen(PORT, HOST, () => {
-//     console.log(`✅ Server đang chạy tại http://${HOST}:${PORT}/api-docs`);
-//         async function init() {
+//     async function init() {
 //         try {
 //             await connectMySQL();
 //             console.log('✅ Kết nối database thành công.');
@@ -75,6 +52,28 @@ app.listen(PORT, () => {
 
 //     init();
 // });
+
+const HOST = "localhost"
+app.listen(PORT, HOST, () => {
+    console.log(`✅ Server đang chạy tại http://${HOST}:${PORT}/api-docs`);
+        async function init() {
+        try {
+            await connectMySQL();
+            console.log('✅ Kết nối database thành công.');
+        } catch (err) {
+            console.error(`❌ Kết nối database thất bại.\n Báo lỗi: ${err.message}`);
+        }
+
+        try {
+            await createTable();
+            console.log('✅ Tạo bảng thành công.');
+        } catch (err) {
+            console.error(`❌ Tạo bảng thất bại.\n Báo lỗi: ${err.message}`);
+        }
+    }
+
+    init();
+});
 
 
 app.get('/ctde', async (_req, res) => {// route kiểm tra kết nối database
@@ -120,7 +119,7 @@ app.post('/rr', async (req, res) => {// route đăng ký user
     }
 });
 
-app.post('/ln', async (req, res) => {// route đăng nhập user
+app.post('/ln', async (req, res) => {
     try {
         const { username, password } = req.body;
         const rows = loginUser(username, password);
@@ -145,25 +144,6 @@ app.post('/ln', async (req, res) => {// route đăng nhập user
     } catch (err) {
         res.status(500).json({
             message: `❌ Đăng nhập tài khoản thât bại.\n Báo lỗi: ${err.message}`,
-        });
-    }
-});
-
-app.post('/lt', async (req, res) => {// route đăng xuất user
-    try{
-        const { id, username } = req.body;
-        const Secure_key = `${Math.floor(Math.random() * 9007199254740991)}`;
-        const Refresh_key = `${Math.floor(Math.random() * -9007199254740991)}`;
-        const token_access = jwt.sign({ id: id, username: username }, Secure_key, { expiresIn: "0s" });
-        const refresh_access = jwt.sign({ id: id, username: username }, Refresh_key, { expiresIn: "0s" });
-        res.status(200).json({
-            message: '✅ Đăng xuất thành công.',
-            token_access: token_access,
-            refresh_access: refresh_access,
-        });
-    } catch (err) {
-        res.status(500).json({
-            message: `❌ Đăng xuất không thành công.\n Báo lỗi: ${err.message}`,
         });
     }
 });
