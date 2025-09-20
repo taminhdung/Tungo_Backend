@@ -9,7 +9,6 @@ async function createTable() {
             username VARCHAR(255) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL UNIQUE,
-            status BOOLEAN DEFAULT false,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`;
 
