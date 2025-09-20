@@ -32,33 +32,10 @@ setupApp(app);
 
 const PORT = process.env.PORT || 9999; // Render sẽ cung cấp PORT
 
-// app.listen(PORT, () => {
-//     console.log(`✅ Server chạy tại https://tungo-backend.onrender.com/api-docs`);
+app.listen(PORT, () => {
+    console.log(`✅ Server chạy tại https://tungo-backend.onrender.com/api-docs`);
 
-//     async function init() {
-//         try {
-//             await connectMySQL();
-//             console.log('✅ Kết nối database thành công.');
-//         } catch (e) {
-//             console.error(`❌ Kết nối database thất bại.\n Báo lỗi: ${e.message}`);
-//         }
-
-//         try {
-//             await createTable();
-//             console.log('✅ Tạo bảng thành công.');
-//         } catch (e) {
-//             console.error(`❌ Tạo bảng thất bại.\n Báo lỗi: ${e.message}`);
-//         }
-//     }
-
-//     init();
-// });
-
-const HOST = "localhost"
-
-app.listen(PORT, HOST, () => {
-    console.log(`✅ Server đang chạy tại http://${HOST}:${PORT}/api-docs`);
-        async function init() {
+    async function init() {
         try {
             await connectMySQL();
             console.log('✅ Kết nối database thành công.');
@@ -76,6 +53,29 @@ app.listen(PORT, HOST, () => {
 
     init();
 });
+
+// const HOST = "localhost"
+
+// app.listen(PORT, HOST, () => {
+//     console.log(`✅ Server đang chạy tại http://${HOST}:${PORT}/api-docs`);
+//         async function init() {
+//         try {
+//             await connectMySQL();
+//             console.log('✅ Kết nối database thành công.');
+//         } catch (e) {
+//             console.error(`❌ Kết nối database thất bại.\n Báo lỗi: ${e.message}`);
+//         }
+
+//         try {
+//             await createTable();
+//             console.log('✅ Tạo bảng thành công.');
+//         } catch (e) {
+//             console.error(`❌ Tạo bảng thất bại.\n Báo lỗi: ${e.message}`);
+//         }
+//     }
+
+//     init();
+// });
 
 app.get('/ctde', async (_req, res) => {// route kiểm tra kết nối database
     try {
